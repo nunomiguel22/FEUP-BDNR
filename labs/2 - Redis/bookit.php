@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require __DIR__ . '/vendor/autoload.php';
 
 Predis\Autoloader::register();
@@ -8,9 +8,9 @@ try {
 	// Connect to the localhost Redis server.
 	$redis = new Predis\Client();
 
-    $bookmark_id = $redis->incr("next_bookmark_id");
     $timestamp = time();
     $url = $_POST["url"];
+    $bookmark_hash = hash("md5", $url);
     $tags = explode(",", $_POST["tags"]);
 
     /**
@@ -20,14 +20,16 @@ try {
      * tag:tagname -> set of bookmarks associated to the tag
      */
 
-    $bookmark_prefix ="bookmark:" . $bookmark_id;
-
+    $bookmark_prefix ="bookmark:" . $bookmark_hash;
     $redis->hset($bookmark_prefix, "url", $url);
-    $redis->zadd("bookmarks", $timestamp, $bookmark_id);
+    print_r($_SESSION["USERNAME"]);
+    $redis->sadd($bookmark_prefix . ":users", $_SESSION["USERNAME"]);
+
+    $redis->zadd("users:" . $_SESSION["USERNAME"] . ":bookmarks", $timestamp, $bookmark_hash);
 
     foreach ($tags as $tag){
-        $redis->sadd($bookmark_prefix . ":tags", $tag);
-        $redis->sadd("tag:" . $tag, $bookmark_id);
+        $redis->sadd($bookmark_prefix . ":tags:" . $_SESSION["USERNAME"], $tag);
+        $redis->sadd("users:" . $_SESSION["USERNAME"] . ":tag:" . $tag, $bookmark_hash);
     }
 
 } catch (Exception $e) {
