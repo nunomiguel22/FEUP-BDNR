@@ -1,35 +1,8 @@
 docker run -p 8182:8182 --name janusgraph-default docker.io/janusgraph/janusgraph:latest
 
-bin/gremlin.sh
-:remote connect tinkerpop.server conf/remote.yaml
-
-
-graph = TinkerFactory.createModern()
-mike = graph.addVertex('mike')
-john = graph.addVertex('john')
-mikeJohn = mike.addEdge('friend', john)
-mike.property('age', 40)
-mikeJohn.property('time', '232131')
-mike.value('age')
-mikeJohn.value('time')
-mikeJohn.properties()
-mike.properties()
-mike.label()
-graph.edges()
-graph.vertices()
-g = traversal().withRemote('conf/remote-graph.properties') #Can use python now
-g.V().has('age', 40)
-gt.V().hasLabel('mike')
-gt.E().hasLabel('friend')
-
-
-startup:
-docker run -p 8182:8182 --name janusgraph-default docker.io/janusgraph/janusgraph:latest
-
-bin/gremlin.sh
+bin/gremlin.sh(linux) or bin/gremlin.bat(windows)
 
 :remote connect tinkerpop.server conf/remote.yaml
-
 graph = TinkerFactory.createModern()
 graph.clear()
 g = traversal().withRemote('conf/remote-graph.properties')
