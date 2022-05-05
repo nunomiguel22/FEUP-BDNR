@@ -1,12 +1,21 @@
-#pylint: skip-file
+# pylint: skip-file
 import pandas as pd
 import ast
 from progress.bar import Bar
+
+CUTOFF_YEAR = 2014
 
 df = pd.read_csv('datasets/movies_metadata.csv', low_memory=False)
 # Drop adult films
 df = df[df["adult"] == "False"]
 df = df.drop(["adult", "homepage"], axis=1)
+df = df.dropna(subset=["release_date"])
+df["year"] = df["release_date"].map(lambda x: int(x.split("-")[0]))
+
+df = df[df["year"] > CUTOFF_YEAR]
+
+df = df.drop(["year"], axis=1)
+
 
 genres_dict = {"id": [], "name": []}
 movies_genres_dict = {"movie_id": [], "genre_id": []}

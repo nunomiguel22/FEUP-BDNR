@@ -36,13 +36,16 @@ def upload_edges(df, in_column, out_column, in_list, out_list, g, label):
         out_id = row[out_column]
         in_vertex = find_vertex(in_list, in_id)
         out_vertex = find_vertex(out_list, out_id)
-        edge = g.addE(label).from_(in_vertex).to(out_vertex)
+        if in_vertex is None or out_vertex is None:
+            continue
+        edge = g.addE(label).from_(in_vertex[1]).to(out_vertex[1])
         for column in df.columns:
             if column in (in_column, out_column) or pd.isna(row[column]):
                 continue
             edge = edge.property(column, row[column])
 
         edges.append(edge.next())
+    bar.finish()
     return edges
 
 
@@ -62,7 +65,7 @@ def main():
     genres = upload_dataframe(genres, g, "genres")
     movies = upload_dataframe(movies, g, "movies")
     movie_genres = upload_edges(
-        movie_genres, "movie_id", "genre_id", movies, genres, "of_genre"
+        movie_genres, "movie_id", "genre_id", movies, genres, g, "of_genre"
     )
 
     person = upload_dataframe(person, g, "person")

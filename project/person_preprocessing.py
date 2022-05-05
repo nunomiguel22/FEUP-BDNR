@@ -4,6 +4,7 @@ import ast
 from progress.bar import Bar
 
 df = pd.read_csv('datasets/credits.csv', low_memory=False)
+df_movies = pd.read_csv('datasets/movies.csv', low_memory=False)
 
 person_dict = {"id": [], "name": [], "gender": [], "profile_path": []}
 cast_dict = {"movie_id": [], "person_id": [], "character": [], "credit_id": []}
@@ -14,9 +15,12 @@ crew_dict = {
 
 bar = Bar('Row', max=df.shape[0])
 for i, row in df.iterrows():
-    bar().next()
+    bar.next()
 
     movie_id = row["id"]
+    if movie_id not in df_movies["id"]:
+        continue
+
     cast = ast.literal_eval(row["cast"])
     crew = ast.literal_eval(row["crew"])
 
