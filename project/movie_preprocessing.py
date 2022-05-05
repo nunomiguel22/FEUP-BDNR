@@ -3,7 +3,7 @@ import pandas as pd
 import ast
 from progress.bar import Bar
 
-CUTOFF_YEAR = 2014
+CUTOFF_YEAR = 2016
 
 df = pd.read_csv('datasets/movies_metadata.csv', low_memory=False)
 # Drop adult films

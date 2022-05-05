@@ -6,3 +6,5 @@ bin/gremlin.sh(linux) or bin/gremlin.bat(windows)
 graph = TinkerFactory.createModern()
 graph.clear()
 g = traversal().withRemote('conf/remote-graph.properties')
+
+g.V().drop().iterate()

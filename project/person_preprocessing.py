@@ -18,7 +18,7 @@ for i, row in df.iterrows():
     bar.next()
 
     movie_id = row["id"]
-    if movie_id not in df_movies["id"]:
+    if movie_id not in df_movies["id"].tolist():
         continue
 
     cast = ast.literal_eval(row["cast"])

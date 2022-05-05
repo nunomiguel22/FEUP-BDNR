@@ -62,21 +62,24 @@ def main():
     g = traversal().with_remote(DriverRemoteConnection(
         'ws://127.0.0.1:8182/gremlin', 'g'))
 
-    genres = upload_dataframe(genres, g, "genres")
     movies = upload_dataframe(movies, g, "movies")
-    movie_genres = upload_edges(
-        movie_genres, "movie_id", "genre_id", movies, genres, g, "of_genre"
-    )
-
     person = upload_dataframe(person, g, "person")
-    movie_collections = upload_edges(
-        movie_collections, "movie_id", "collection_id", movies, collections, g, "of_collection"
-    )
     cast = upload_edges(
         cast, "movie_id", "person_id", movies, person, g, "acted_in"
     )
     crew = upload_edges(
         crew, "movie_id", "person_id", movies, person, g, "crew_in"
+    )
+
+    genres = upload_dataframe(genres, g, "genres")
+
+    movie_genres = upload_edges(
+        movie_genres, "movie_id", "genre_id", movies, genres, g, "of_genre"
+    )
+
+    collections = upload_dataframe(collections, g, "collections")
+    movie_collections = upload_edges(
+        movie_collections, "movie_id", "collection_id", movies, collections, g, "of_collection"
     )
 
 
