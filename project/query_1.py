@@ -28,3 +28,25 @@ for member in crew:
     name = g.E(member.id["@value"]["relationId"]
                ).bothV().hasLabel('person').values('name').next()
     print(f'{name} - {job}')
+
+ACTOR_NAME = "Willem Dafoe"
+
+print('\nACTOR INFO\n\n')
+actor = g.V().hasLabel('person').has('name', ACTOR_NAME).next()
+actor_info = g.V(actor.id).valueMap().next()
+pp.pprint(actor_info)
+
+print('\nWORKED IN\n\n')
+movies = g.V(actor.id).bothE('acted_in').bothV().hasLabel(
+    'movies').toList()
+for film in movies:
+    print(g.V(film.id).values('title').next())
+
+print('\nWORKED WITH\n\n')
+for film in movies:
+    worked_with = g.V(film.id).bothE('acted_in').bothV().hasLabel(
+        'person').values('name').toList()
+    worked_with = set(worked_with)
+    for colleague in worked_with:
+        if colleague != ACTOR_NAME: print(colleague)
+
