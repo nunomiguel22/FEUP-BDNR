@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title> {{ movie.original_title[0] }}</title>
+{% endblock %}
+
+
+{% block body %}
+<div>
+    {{ movie.original_title[0] }}
+</div>
+<div>
+    {{ movie.budget[0] }}
+</div>
+<div>
+    {{ movie.imdb_id[0] }}
+</div>
+<div>
+    {{ movie.overview[0] }}
+</div>
+<div>
+    {{ movie.original_language[0] }}
+</div>
+<div>
+    {{ movie.release_date[0] }}
+</div>
+<div>
+    {{ movie.revenue[0] }}
+</div>
+<div>
+    {{ movie.runtime[0] }}
+</div>
+{% if movie.tagline is defined %}
+<div>
+    {{ movie.tagline[0] }}
+</div>
+{% endif %}
+
+<div>
+    {{ movie.title[0] }}
+</div>
+<div>
+    {{ movie.vote_average[0] }}
+</div>
+<div>
+    <img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ movie.poster_path[0] }}" alt="">
+</div>
+
+
+{% endblock %}

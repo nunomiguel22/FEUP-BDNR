@@ -38,26 +38,33 @@ def upload_edges(df, in_column, out_column, in_list, out_list, g, label):
         out_vertex = find_vertex(out_list, out_id)
         if in_vertex is None or out_vertex is None:
             continue
+
         edge = g.addE(label).from_(in_vertex[1]).to(out_vertex[1])
         for column in df.columns:
             if column in (in_column, out_column) or pd.isna(row[column]):
                 continue
             edge = edge.property(column, row[column])
+        edges.append(edge.next())
 
+        edge = g.addE(label).from_(out_vertex[1]).to(in_vertex[1])
+        for column in df.columns:
+            if column in (in_column, out_column) or pd.isna(row[column]):
+                continue
+            edge = edge.property(column, row[column])
         edges.append(edge.next())
     bar.finish()
     return edges
 
 
 def main():
-    cast = pd.read_csv('datasets/cast.csv')
-    collections = pd.read_csv('datasets/collections.csv')
-    crew = pd.read_csv('datasets/crew.csv')
-    genres = pd.read_csv('datasets/genres.csv')
-    movie_collections = pd.read_csv('datasets/movies_collections.csv')
-    movie_genres = pd.read_csv('datasets/movies_genres.csv')
-    movies = pd.read_csv('datasets/movies.csv')
-    person = pd.read_csv('datasets/person.csv')
+    cast = pd.read_csv('../datasets/cast.csv')
+    collections = pd.read_csv('../datasets/collections.csv')
+    crew = pd.read_csv('../datasets/crew.csv')
+    genres = pd.read_csv('../datasets/genres.csv')
+    movie_collections = pd.read_csv('../datasets/movies_collections.csv')
+    movie_genres = pd.read_csv('../datasets/movies_genres.csv')
+    movies = pd.read_csv('../datasets/movies.csv')
+    person = pd.read_csv('../datasets/person.csv')
 
     g = traversal().with_remote(DriverRemoteConnection(
         'ws://127.0.0.1:8182/gremlin', 'g'))
