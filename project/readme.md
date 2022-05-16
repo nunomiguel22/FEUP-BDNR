@@ -27,7 +27,7 @@ python3 utils/janus_loading.py
 
 # Visualizing with gremlin vizualizer
 
-Use ```host.docker.internal``` as the host. Test with query: 
+Use ```janusgraph``` as the host. Test with query: 
 
 ```bash
 g.V().limit(5)
