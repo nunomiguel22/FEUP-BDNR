@@ -22,7 +22,8 @@ This only needs to be done on the first time.
 # Populating the database
 
 ```bash
-python3 utils/janus_loading.py
+cd utils
+python3 janus_loading.py
 ```
 
 # Visualizing with gremlin vizualizer

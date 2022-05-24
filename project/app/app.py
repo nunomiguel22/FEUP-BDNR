@@ -10,7 +10,7 @@ g = traversal().with_remote(DriverRemoteConnection(
 
 @app.route('/movie/<int:id>')
 def movie(id):
-    movie = movies = g.V(id).valueMap().next()
+    movie = g.V(id).valueMap().next()
     return render_template('movie.html', movie=movie)
 
 
@@ -21,7 +21,7 @@ def index():
     print(sort_by)
     movies = g.V().hasLabel('movies').order().by(sort_by).limit(20).toList()
     movies = [(movie.id, g.V(movie.id).valueMap().next()) for movie in movies]
-    return render_template('index.html', movies=movies, )
+    return render_template('index.html', movies=movies)
 
 
 def main():
