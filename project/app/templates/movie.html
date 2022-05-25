@@ -46,5 +46,21 @@
     <img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ movie.poster_path[0] }}" alt="">
 </div>
 
+{% for cast_member in cast %}
+<div>
+    {{ cast_member["name"][0] }}
+
+    {% if "profile_path" in cast_member %}
+
+    <img style="max-height: 100px;"
+        src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ cast_member.profile_path[0] }}" alt="">
+
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+
 
 {% endblock %}

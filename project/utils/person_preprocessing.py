@@ -3,8 +3,8 @@ import pandas as pd
 import ast
 from progress.bar import Bar
 
-df = pd.read_csv('datasets/credits.csv', low_memory=False)
-df_movies = pd.read_csv('datasets/movies.csv', low_memory=False)
+df = pd.read_csv('../datasets/credits.csv', low_memory=False)
+df_movies = pd.read_csv('../datasets/movies.csv', low_memory=False)
 
 person_dict = {"id": [], "name": [], "gender": [], "profile_path": []}
 cast_dict = {"movie_id": [], "person_id": [], "character": [], "credit_id": []}
@@ -50,7 +50,7 @@ crew_df = pd.DataFrame(crew_dict).drop_duplicates()
 person_df = pd.DataFrame(person_dict).drop_duplicates()
 
 cast_df.to_csv(
-    'datasets/cast.csv', index=False
+    '../datasets/cast.csv', index=False
 )
-crew_df.to_csv('datasets/crew.csv', index=False)
-person_df.to_csv('datasets/person.csv', index=False)
+crew_df.to_csv('../datasets/crew.csv', index=False)
+person_df.to_csv('../datasets/person.csv', index=False)

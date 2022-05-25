@@ -1,9 +1,11 @@
 version: "3"
 services:
   janusgraph:
-    image: docker.io/janusgraph/janusgraph
+    image: janusgraph/janusgraph:0.6.1-90f2bbe
     ports:
       - "8182:8182"
+    volumes:
+      - ./configuration/janusgraph:/etc/opt/janusgraph/:ro
     container_name: "janusgraph"
 
   flask-app:
@@ -21,3 +23,20 @@ services:
       - "3000:3000"
       - "3001:3001"
     container_name: "gremlin-visualizer"
+
+  cassandra:
+    image: cassandra:3.11
+    ports:
+      - "9160:9160"
+      - "9042:9042"
+      - "7199:7199"
+      - "7001:7001"
+      - "7000:7000"
+    environment:
+      - CASSANDRA_START_RPC=true
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=256M
+    container_name: "cassandra"
+
+
+

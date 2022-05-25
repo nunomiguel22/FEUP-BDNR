@@ -5,7 +5,7 @@ from progress.bar import Bar
 
 CUTOFF_YEAR = 2016
 
-df = pd.read_csv('datasets/movies_metadata.csv', low_memory=False)
+df = pd.read_csv('../datasets/movies_metadata.csv', low_memory=False)
 # Drop adult films
 df = df[df["adult"] == "False"]
 df = df.drop(["adult", "homepage"], axis=1)
@@ -49,18 +49,17 @@ bar.finish()
 df = df.drop([
     "belongs_to_collection", "genres", "video",
     "production_companies", "production_countries",
-    "popularity", "spoken_languages", "status",
-    "vote_count"
+    "spoken_languages", "status", "vote_count"
 ], axis=1)
 genres_df = pd.DataFrame(genres_dict).drop_duplicates()
 collections_df = pd.DataFrame(collections_dict).drop_duplicates()
 movies_collections_df = pd.DataFrame(movies_collections_dict).drop_duplicates()
 movies_genres_df = pd.DataFrame(movies_genres_dict).drop_duplicates()
 
-df.to_csv('datasets/movies.csv', index=False)
+df.to_csv('../datasets/movies.csv', index=False)
 movies_collections_df.to_csv(
-    'datasets/movies_collections.csv', index=False
+    '../datasets/movies_collections.csv', index=False
 )
-collections_df.to_csv('datasets/collections.csv', index=False)
-genres_df.to_csv('datasets/genres.csv', index=False)
-movies_genres_df.to_csv('datasets/movies_genres.csv', index=False)
+collections_df.to_csv('../datasets/collections.csv', index=False)
+genres_df.to_csv('../datasets/genres.csv', index=False)
+movies_genres_df.to_csv('../datasets/movies_genres.csv', index=False)

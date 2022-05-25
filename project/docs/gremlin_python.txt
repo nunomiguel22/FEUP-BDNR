@@ -1,0 +1,16 @@
+__ attributes
+
+['V', '__', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', 
+'__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', 
+'__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', 
+'__subclasshook__', '__weakref__', 'addE', 'addV', 'add_e', 'add_v', 'aggregate', 'and_', 'as_', 'barrier',
+'both', 'bothE', 'bothV', 'both_e', 'both_v', 'branch', 'call', 'cap', 'choose', 'coalesce', 'coin', 'constant',
+'count', 'cyclicPath', 'cyclic_path', 'dedup', 'drop', 'element', 'elementMap', 'element_map', 'emit', 'fail',
+'filter_', 'flatMap', 'flat_map', 'fold', 'graph_traversal', 'group', 'groupCount', 'group_count', 'has', 'hasId',
+'hasKey', 'hasLabel', 'hasNot', 'hasValue', 'has_id', 'has_key_', 'has_label', 'has_not', 'has_value', 'id_',
+'identity', 'inE', 'inV', 'in_', 'in_e', 'in_v', 'index', 'inject', 'is_', 'key', 'label', 'limit', 'local', 'loops',
+'map', 'match', 'math', 'max_', 'mean', 'merge_e', 'merge_v', 'min_', 'not_', 'optional', 'or_', 'order', 'otherV',
+'other_v', 'out', 'outE', 'outV', 'out_e', 'out_v', 'path', 'project', 'properties', 'property', 'propertyMap',
+'property_map', 'range_', 'repeat', 'sack', 'sample', 'select', 'sideEffect', 'side_effect', 'simplePath', 
+'simple_path', 'skip', 'start', 'store', 'subgraph', 'sum_', 'tail', 'timeLimit', 'time_limit', 'times', 'to', 
+'toE', 'toV', 'to_e', 'to_v', 'tree', 'unfold', 'union', 'until', 'value', 'valueMap', 'value_map', 'values', 'where']
