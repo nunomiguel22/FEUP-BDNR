@@ -1,4 +1,5 @@
 # pylint: skip-file
+from lib2to3.pytree import generate_matches
 from flask import Flask, render_template, request
 from gremlin_python.process.anonymous_traversal import traversal
 from gremlin_python.process.graph_traversal import __
@@ -21,7 +22,6 @@ def movie(id):
     cast = g.V(id).outE('acted_in').inV().valueMap(
         "name", "profile_path").to_list()
     return render_template('movie.html', movie=movie, cast=cast)
-
 
 @app.route('/actor/<int:id>')
 def actor(id):
@@ -59,11 +59,23 @@ def actor(id):
 @app.route('/')
 def index():
     sort_by = request.args.get("sort_by")
+    search = request.args.get("search")
+    filter_by = request.args.get("filter_by")
+    year = request.args.get("year")
     sort_by = "original_title" if sort_by is None else sort_by
     print(sort_by)
-    movies = g.V().hasLabel('movies').order().by(sort_by).limit(20).toList()
+    if search != None:
+        movies = g.V().hasLabel('movies').has('original_title', search).toList()
+    elif filter_by != None:
+        movies = g.V().hasLabel('genres').has('name', filter_by).outE('of_genre').limit(20).inV().toList()
+    elif year != None:
+        movies = g.V().hasLabel('movies').has('year', year).limit(20).toList()
+    else:
+        movies = g.V().hasLabel('movies').order().by(sort_by).limit(20).toList()
+    years = g.V().hasLabel('movies').values("year").dedup().to_list()
+    genres = g.V().hasLabel("movies").outE('of_genre').inV().dedup().valueMap('name').toList()
     movies = [(movie.id, g.V(movie.id).valueMap().next()) for movie in movies]
-    return render_template('index.html', movies=movies)
+    return render_template('index.html', movies=movies, genres=genres, years=years)
 
 
 def main():

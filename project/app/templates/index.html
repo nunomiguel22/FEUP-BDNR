@@ -5,7 +5,37 @@
 {% endblock %}
 
 {% block body %}
+<div class="topnav">
+    <input type="search" id="myInput" placeholder="Search for movies..">
+    <div class="dropdown">
+        <button class="dropbtn">Year
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            {% for year in years %}
+            <a href="/?year={{ year }}">{{ year }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="dropdown">
+        <button class="dropbtn">Genre
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown-content">
+            {% for genre in genres %}
+            <a href="/?filter_by={{ genre.name[0] }}">{{ genre.name[0] }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+document.getElementById("myInput").addEventListener("search", myFunction);
 
+function myFunction() {
+  var v = document.getElementById("myInput");
+  window.location.href ="/?search=" + v.value;
+}
+</script>
 <table>
     <tr>
         <th> <a href="/?sort_by=original_title"> Original Title</a></th>
@@ -25,6 +55,4 @@
     {% endfor %}
 
 </table>
-
-
 {% endblock %}

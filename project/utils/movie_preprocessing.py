@@ -14,7 +14,7 @@ df["year"] = df["release_date"].map(lambda x: int(x.split("-")[0]))
 
 df = df[df["year"] > CUTOFF_YEAR]
 
-df = df.drop(["year"], axis=1)
+# df = df.drop(["year"], axis=1)
 
 
 genres_dict = {"id": [], "name": []}
