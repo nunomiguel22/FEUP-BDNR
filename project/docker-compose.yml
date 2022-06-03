@@ -24,7 +24,7 @@ services:
       - "3001:3001"
     container_name: "gremlin-visualizer"
 
-  cassandra:
+  cassandra_p1:
     image: cassandra:3.11
     ports:
       - "9160:9160"
@@ -36,7 +36,17 @@ services:
       - CASSANDRA_START_RPC=true
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=256M
-    container_name: "cassandra"
+    container_name: "cassandra_p1"
+
+  #cassandra_p2:
+  #  image: cassandra:3.11
+  #  environment:
+  #    - CASSANDRA_SEEDS=cassandra_p1
+  #    - MAX_HEAP_SIZE=1G
+  #    - HEAP_NEWSIZE=256M
+  #  container_name: "cassandra_p2"
+  #  depends_on: 
+  #    - cassandra_p1
 
 
 
