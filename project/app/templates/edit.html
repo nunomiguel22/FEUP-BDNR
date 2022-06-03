@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>{{ id }}</title>
+{% endblock %}
+
+{% block body %}
+<h1>
+    Edit Page : {{ id }}
+</h1>
+<div>
+    <form method="post" action="/{{ id }}/update">
+      
+        {% for key,value in vertex.items() %}
+        <label for="{{key}}">{{key}}:</label>
+        <input type="text" name="{{key}}" value="{{value[0]}}">
+        {% endfor %} 
+        <input type="submit" value="Submit">
+    </form>
+</div>
+
+{% endblock %}

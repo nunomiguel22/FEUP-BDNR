@@ -1,10 +1,11 @@
 # pylint: skip-file
 from lib2to3.pytree import generate_matches
-from flask import Flask, render_template, request
+from platform import release
+from flask import Flask, render_template, request, redirect
 from gremlin_python.process.anonymous_traversal import traversal
 from gremlin_python.process.graph_traversal import __
 from gremlin_python.driver.driver_remote_connection import DriverRemoteConnection
-
+import sys
 from gremlin_python.process.graph_traversal import __
 from gremlin_python.process.strategies import *
 
@@ -22,6 +23,21 @@ def movie(id):
     cast = g.V(id).outE('acted_in').inV().valueMap(
         "name", "profile_path").to_list()
     return render_template('movie.html', movie=movie, cast=cast)
+
+@app.route('/movie/<int:id>/edit')
+def edit(id):
+    vertex = g.V(id).valueMap().next()
+    return render_template('edit.html', id=id, vertex=vertex)
+
+@app.route('/<int:id>/update', methods=['POST'])
+def updatevertex(id):
+    vertex=g.V(id)
+    for key,value in request.form.items():
+        vertex = vertex.property(key,value)
+    print(f"{vertex=}", flush=True)
+    vertex.next()
+    return redirect('/')
+
 
 @app.route('/actor/<int:id>')
 def actor(id):
@@ -63,7 +79,6 @@ def index():
     filter_by = request.args.get("filter_by")
     year = request.args.get("year")
     sort_by = "original_title" if sort_by is None else sort_by
-    print(sort_by)
     if search != None:
         movies = g.V().hasLabel('movies').has('original_title', search).toList()
     elif filter_by != None:

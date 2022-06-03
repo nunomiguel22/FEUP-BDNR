@@ -38,7 +38,7 @@ function myFunction() {
 </script>
 <table>
     <tr>
-        <th> <a href="/?sort_by=original_title"> Original Title</a></th>
+        <th><a href="/?sort_by=original_title"> Original Title</a></th>
         <th><a href="/?sort_by=release_date">Release Date</a></th>
         <th><a href="/?sort_by=vote_average">Vote Average</a></th>
         <th><a href="/?sort_by=original_language">Original Language</a></th>
@@ -47,7 +47,9 @@ function myFunction() {
 
     {% for movie in movies %}
     <tr>
-        <td> <a href="/movie/{{ movie[0] }}">{{ movie[1].original_title[0] }}</a> </td>
+        <td> <a href="/movie/{{ movie[0] }}">{{ movie[1].original_title[0] }}</a>
+            <button type="button" onclick="location.href='/movie/{{ movie[0] }}/del'" class="btn btn-default btn-sm" style="float: right"> Del </button>
+            <button type="button" onclick="location.href='/movie/{{ movie[0] }}/edit'" class="btn btn-default btn-sm" style="float: right;margin-right: 4px;"> Edit </button>
         <td>{{ movie[1].release_date[0] }}</td>
         <td>{{ movie[1].vote_average[0] }}</td>
         <td>{{ movie[1].original_language[0] }}</td>
