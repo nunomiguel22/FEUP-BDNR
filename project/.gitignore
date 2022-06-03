@@ -1,3 +1,4 @@
 .vscode/*
 datasets/credits.csv
 datasets/movies_metadata.csv
+*.pyc

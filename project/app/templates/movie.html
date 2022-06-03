@@ -6,61 +6,80 @@
 
 
 {% block body %}
-<div>
-    {{ movie.original_title[0] }}
-</div>
-<div>
-    {{ movie.budget[0] }}
-</div>
-<div>
-    {{ movie.imdb_id[0] }}
-</div>
-<div>
-    {{ movie.overview[0] }}
-</div>
-<div>
-    {{ movie.original_language[0] }}
-</div>
-<div>
-    {{ movie.release_date[0] }}
-</div>
-<div>
-    {{ movie.revenue[0] }}
-</div>
-<div>
-    {{ movie.runtime[0] }}
-</div>
-{% if movie.tagline is defined %}
-<div>
-    {{ movie.tagline[0] }}
-</div>
-{% endif %}
+<h1>{{ movie.original_title[0] }}</h1>
 
-<div>
-    {{ movie.title[0] }}
-</div>
-<div>
-    {{ movie.vote_average[0] }}
-</div>
-<div>
-    <img src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ movie.poster_path[0] }}" alt="">
-</div>
 
-{% for cast_member in cast %}
-<div>
-    {{ cast_member["name"][0] }}
+<div class="float-container">
 
-    {% if "profile_path" in cast_member %}
+    <div class="float-child">
+        <p>Budget: {{ movie.budget[0] }}</p>
+        <p>Revenue: {{ movie.revenue[0] }}</p>
+        <p>IMDB ID: {{ movie.imdb_id[0] }}</p>
+        <div>
+            <span>Overview:</span>
+            <br>
+            <span>{{ movie.overview[0] }}</span>
+        </div>
+        {% if movie.tagline is defined %}
+        <p> Tagline: {{ movie.tagline[0] }} </p>
+        {% endif %}
+        <p> Original Language: {{ movie.original_language[0].upper() }} </p>
+        <p> Release date: {{ movie.release_date[0] }} </p>
 
-    <img style="max-height: 100px;"
-        src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ cast_member.profile_path[0] }}" alt="">
+        <p> Runtime:{{ movie.runtime[0] }} </p>
 
-    {% endif %}
+        <h4>Rating: {{ movie.vote_average[0] }} </h4>
+    </div>
+
+    <div class="float-child">
+        <img style="max-height:400px;" src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ movie.poster_path[0] }}"
+            alt="">
+    </div>
 
 </div>
 
-{% endfor %}
+<div class="float-container">
 
+    <div class="float-child">
+        <h2>Cast</h2>
+
+        {% for cast_member in cast %}
+
+        <h4> <a href="/actor/{{cast_member[1][T.id]}}">{{cast_member[1].name}}</a> as {{cast_member[0].character}}</h4>
+
+
+
+        {% if "profile_path" in cast_member[1] %}
+        <div>
+            <a href="/actor/{{cast_member[1][T.id]}}">
+                <img style="max-height: 100px;"
+                    src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ cast_member[1].profile_path }}" alt="">
+            </a>
+        </div>
+        {% endif %}
+
+        {% endfor %}
+    </div>
+
+    <div class="float-child">
+        <h2>Crew</h2>
+        {% for crew_member in crew %}
+
+        <h4>{{crew_member[1].name}}</h4>
+        <span>{{crew_member[0].job}}</span>
+        <div>
+            {% if "profile_path" in cast_member %}
+
+            <img style="max-height: 100px;"
+                src="https://image.tmdb.org/t/p/w600_and_h900_bestv2/{{ cast_member[1].profile_path[0] }}" alt="">
+
+            {% endif %}
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
 
 
 {% endblock %}

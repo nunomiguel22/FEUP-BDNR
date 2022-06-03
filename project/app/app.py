@@ -1,39 +1,57 @@
 # pylint: skip-file
-from lib2to3.pytree import generate_matches
-from platform import release
 from flask import Flask, render_template, request, redirect
 from gremlin_python.process.anonymous_traversal import traversal
-from gremlin_python.process.graph_traversal import __
 from gremlin_python.driver.driver_remote_connection import DriverRemoteConnection
-import sys
 from gremlin_python.process.graph_traversal import __
 from gremlin_python.process.strategies import *
+from gremlin_python.process.traversal import T
+import time
 
 
+KBID = 0
 app = Flask(__name__)
 g = traversal().with_remote(DriverRemoteConnection(
     'ws://janusgraph:8182/gremlin', 'g'))
 
-KBID = g.V().hasLabel("person").has("name", "Kevin Bacon").next().id
+
+def init_janus(KBID):
+    for _ in range(30):
+        if KBID:
+            return
+        try:
+            KBID = g.V().hasLabel("person").has("name", "Kevin Bacon").next().id
+        except Exception as e:
+            print("Could not connect to JanusGraph, perhaps the graph is not loaded")
+        finally:
+            time.sleep(1)
+    exit(-1)
 
 
 @app.route('/movie/<int:id>')
 def movie(id):
     movie = g.V(id).valueMap().next()
-    cast = g.V(id).outE('acted_in').inV().valueMap(
-        "name", "profile_path").to_list()
-    return render_template('movie.html', movie=movie, cast=cast)
+    cast_edges = g.V(id).outE('acted_in').elementMap().to_list()
+    cast_vertices = g.V(id).outE('acted_in').inV().elementMap().to_list()
+    cast = list(zip(cast_edges, cast_vertices))
+
+    crew_edges = g.V(id).outE('crew_in').elementMap().to_list()
+    crew_vertices = g.V(id).outE('crew_in').inV().elementMap().to_list()
+    crew = list(zip(crew_edges, crew_vertices))
+
+    return render_template('movie.html', movie=movie, cast=cast, crew=crew, T=T)
+
 
 @app.route('/movie/<int:id>/edit')
 def edit(id):
     vertex = g.V(id).valueMap().next()
     return render_template('edit.html', id=id, vertex=vertex)
 
+
 @app.route('/<int:id>/update', methods=['POST'])
 def updatevertex(id):
-    vertex=g.V(id)
-    for key,value in request.form.items():
-        vertex = vertex.property(key,value)
+    vertex = g.V(id)
+    for key, value in request.form.items():
+        vertex = vertex.property(key, value)
     print(f"{vertex=}", flush=True)
     vertex.next()
     return redirect('/')
@@ -41,7 +59,6 @@ def updatevertex(id):
 
 @app.route('/actor/<int:id>')
 def actor(id):
-    global KBID
     actor = g.V(id).valueMap().next()
     movies = g.V(id).outE("acted_in").to_list()
 
@@ -82,19 +99,21 @@ def index():
     if search != None:
         movies = g.V().hasLabel('movies').has('original_title', search).toList()
     elif filter_by != None:
-        movies = g.V().hasLabel('genres').has('name', filter_by).outE('of_genre').limit(20).inV().toList()
+        movies = g.V().hasLabel('genres').has('name', filter_by).outE(
+            'of_genre').limit(20).inV().toList()
     elif year != None:
         movies = g.V().hasLabel('movies').has('year', year).limit(20).toList()
     else:
         movies = g.V().hasLabel('movies').order().by(sort_by).limit(20).toList()
     years = g.V().hasLabel('movies').values("year").dedup().to_list()
-    genres = g.V().hasLabel("movies").outE('of_genre').inV().dedup().valueMap('name').toList()
+    genres = g.V().hasLabel("movies").outE(
+        'of_genre').inV().dedup().valueMap('name').toList()
     movies = [(movie.id, g.V(movie.id).valueMap().next()) for movie in movies]
     return render_template('index.html', movies=movies, genres=genres, years=years)
 
 
 def main():
-    """ Entry function """
+    init_janus(KBID)
     app.run(debug=True, host='0.0.0.0')
 
 
