@@ -8,13 +8,13 @@
 <h1>
     Edit Page : {{ id }}
 </h1>
-<div>
+<div style="width: 50%; margin: auto;">
     <form method="post" action="/{{ id }}/update">
-      
+
         {% for key,value in vertex.items() %}
         <label for="{{key}}">{{key}}:</label>
         <input type="text" name="{{key}}" value="{{value[0]}}">
-        {% endfor %} 
+        {% endfor %}
         <input type="submit" value="Submit">
     </form>
 </div>

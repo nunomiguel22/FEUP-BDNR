@@ -29,12 +29,12 @@
     </div>
 </div>
 <script>
-document.getElementById("myInput").addEventListener("search", myFunction);
+    document.getElementById("myInput").addEventListener("search", myFunction);
 
-function myFunction() {
-  var v = document.getElementById("myInput");
-  window.location.href ="/?search=" + v.value;
-}
+    function myFunction() {
+        var v = document.getElementById("myInput");
+        window.location.href = "/?search=" + v.value;
+    }
 </script>
 <table>
     <tr>
@@ -48,8 +48,11 @@ function myFunction() {
     {% for movie in movies %}
     <tr>
         <td> <a href="/movie/{{ movie[0] }}">{{ movie[1].original_title[0] }}</a>
-            <button type="button" onclick="location.href='/movie/{{ movie[0] }}/del'" class="btn btn-default btn-sm" style="float: right"> Del </button>
-            <button type="button" onclick="location.href='/movie/{{ movie[0] }}/edit'" class="btn btn-default btn-sm" style="float: right;margin-right: 4px;"> Edit </button>
+            <form action="/{{ movie[0] }}/delete" method="POST">
+                <button type="submit" class="btn btn-default btn-sm" style="float: right"> Del </button>
+            </form>
+            <button type="button" onclick="location.href='/{{ movie[0] }}/edit'" class="btn btn-default btn-sm"
+                style="float: right;margin-right: 4px;"> Edit </button>
         <td>{{ movie[1].release_date[0] }}</td>
         <td>{{ movie[1].vote_average[0] }}</td>
         <td>{{ movie[1].original_language[0] }}</td>

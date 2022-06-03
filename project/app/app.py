@@ -12,6 +12,9 @@ KBID = 0
 app = Flask(__name__)
 g = traversal().with_remote(DriverRemoteConnection(
     'ws://janusgraph:8182/gremlin', 'g'))
+years = g.V().hasLabel('movies').values("year").dedup().to_list()
+genres = g.V().hasLabel("movies").outE(
+    'of_genre').inV().dedup().valueMap('name').toList()
 
 
 def init_janus(KBID):
@@ -41,7 +44,7 @@ def movie(id):
     return render_template('movie.html', movie=movie, cast=cast, crew=crew, T=T)
 
 
-@app.route('/movie/<int:id>/edit')
+@app.route('/<int:id>/edit')
 def edit(id):
     vertex = g.V(id).valueMap().next()
     return render_template('edit.html', id=id, vertex=vertex)
@@ -52,9 +55,15 @@ def updatevertex(id):
     vertex = g.V(id)
     for key, value in request.form.items():
         vertex = vertex.property(key, value)
-    print(f"{vertex=}", flush=True)
     vertex.next()
-    return redirect('/')
+    return redirect(request.referrer)
+
+
+@app.route('/<int:id>/delete', methods=['POST'])
+def delete_vertex(id):
+
+    g.V(id).drop().iterate()
+    return redirect(request.referrer)
 
 
 @app.route('/actor/<int:id>')
@@ -96,18 +105,20 @@ def index():
     filter_by = request.args.get("filter_by")
     year = request.args.get("year")
     sort_by = "original_title" if sort_by is None else sort_by
-    if search != None:
-        movies = g.V().hasLabel('movies').has('original_title', search).toList()
-    elif filter_by != None:
-        movies = g.V().hasLabel('genres').has('name', filter_by).outE(
-            'of_genre').limit(20).inV().toList()
-    elif year != None:
-        movies = g.V().hasLabel('movies').has('year', year).limit(20).toList()
+
+    query = g.V()
+
+    if filter_by is not None:
+        query = query.hasLabel('genres').has('name', filter_by).outE(
+            'of_genre').limit(20).inV()
     else:
-        movies = g.V().hasLabel('movies').order().by(sort_by).limit(20).toList()
-    years = g.V().hasLabel('movies').values("year").dedup().to_list()
-    genres = g.V().hasLabel("movies").outE(
-        'of_genre').inV().dedup().valueMap('name').toList()
+        query = query.hasLabel('movies')
+
+    if year is not None:
+        query = query.has('year', year)
+
+    movies = query.order().by(sort_by).limit(20).toList()
+
     movies = [(movie.id, g.V(movie.id).valueMap().next()) for movie in movies]
     return render_template('index.html', movies=movies, genres=genres, years=years)
 
