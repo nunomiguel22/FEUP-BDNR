@@ -2,6 +2,7 @@
 
 {% block head %}
 <title>{{ id }}</title>
+<script defer type="text/javascript" src="{{ url_for('static', filename='js/edit.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -10,13 +11,25 @@
 </h1>
 <div style="width: 50%; margin: auto;">
     <form method="post" action="/{{ id }}/update">
-
-        {% for key,value in vertex.items() %}
-        <label for="{{key}}">{{key}}:</label>
-        <input type="text" name="{{key}}" value="{{value[0]}}">
-        {% endfor %}
+        <div id="prop_form">
+            {% for key,value in vertex.items() %}
+            <label for="{{key}}">{{key}}:</label>
+            <input type="text" name="{{key}}" value="{{value[0]}}">
+            {% endfor %}
+        </div>
         <input type="submit" value="Submit">
     </form>
 </div>
+
+<div style="width: 50%; margin: auto;">
+    <label for="add_prop">Add Property:</label>
+    <input type="text" name="add_prop" id="prop_key" value="">
+    <input type="submit" id="prop_button" value="Add Property">
+
+
+
+
+</div>
+
 
 {% endblock %}

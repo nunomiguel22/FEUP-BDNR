@@ -74,7 +74,10 @@ def edit(id):
 def updatevertex(id):
     vertex = g.V(id)
     for key, value in request.form.items():
-        vertex = vertex.property(key, value)
+        if value:
+            vertex = vertex.property(key, value)
+        else:
+            g.V(id).properties(key).drop().iterate()
     vertex.next()
     return redirect(request.referrer)
 
