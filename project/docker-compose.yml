@@ -6,6 +6,7 @@ services:
       - "8182:8182"
     volumes:
       - ./configuration/janusgraph:/etc/opt/janusgraph/:ro
+      - ./configuration/conf:/opt/janusgraph/conf/:ro
     container_name: "janusgraph"
 
   flask-app:
@@ -23,7 +24,6 @@ services:
       - "3000:3000"
       - "3001:3001"
     container_name: "gremlin-visualizer"
-
   cassandra_p1:
     image: cassandra:3.11
     ports:
@@ -38,15 +38,12 @@ services:
       - HEAP_NEWSIZE=256M
     container_name: "cassandra_p1"
 
-  #cassandra_p2:
-  #  image: cassandra:3.11
-  #  environment:
-  #    - CASSANDRA_SEEDS=cassandra_p1
-  #    - MAX_HEAP_SIZE=1G
-  #    - HEAP_NEWSIZE=256M
-  #  container_name: "cassandra_p2"
-  #  depends_on: 
-  #    - cassandra_p1
-
+  cassandra_r1:
+    image: cassandra:3.11
+    environment:
+      - CASSANDRA_SEEDS=cassandra_p1
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=256M
+    container_name: "cassandra_r1"
 
 

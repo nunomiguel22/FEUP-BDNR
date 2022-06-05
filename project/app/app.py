@@ -8,16 +8,35 @@ from gremlin_python.process.traversal import T
 import time
 
 
-KBID = 0
 app = Flask(__name__)
-g = traversal().with_remote(DriverRemoteConnection(
-    'ws://janusgraph:8182/gremlin', 'g'))
+
+
+def init_g():
+    g = None
+    for _ in range(60):
+        if g:
+            break
+        try:
+            g = traversal().with_remote(DriverRemoteConnection(
+                'ws://janusgraph:8182/gremlin', 'g'))
+        except Exception as e:
+            print("Could not connect to JanusGraph")
+            print(e)
+        finally:
+            time.sleep(1)
+    return g
+
+
+KBID = 0
+g = init_g()
+
 years = g.V().hasLabel('movies').values("year").dedup().to_list()
 genres = g.V().hasLabel("movies").outE(
     'of_genre').inV().dedup().valueMap('name').toList()
 
 
-def init_janus(KBID):
+def init_janus(KBID, g):
+
     for _ in range(30):
         if KBID:
             return
@@ -25,6 +44,7 @@ def init_janus(KBID):
             KBID = g.V().hasLabel("person").has("name", "Kevin Bacon").next().id
         except Exception as e:
             print("Could not connect to JanusGraph, perhaps the graph is not loaded")
+            print(e)
         finally:
             time.sleep(1)
     exit(-1)
@@ -124,7 +144,7 @@ def index():
 
 
 def main():
-    init_janus(KBID)
+    init_janus(KBID, g)
     app.run(debug=True, host='0.0.0.0')
 
 
