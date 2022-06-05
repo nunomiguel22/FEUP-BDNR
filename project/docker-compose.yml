@@ -24,19 +24,34 @@ services:
       - "3000:3000"
       - "3001:3001"
     container_name: "gremlin-visualizer"
+  
   cassandra_p1:
     image: cassandra:3.11
-    ports:
-      - "9160:9160"
-      - "9042:9042"
-      - "7199:7199"
-      - "7001:7001"
-      - "7000:7000"
     environment:
       - CASSANDRA_START_RPC=true
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=256M
+    ports:
+      - "9160"
+      - "9042"
+      - "7199"
+      - "7001"
+      - "7000"
     container_name: "cassandra_p1"
+
+  cassandra_p2:
+    image: cassandra:3.11
+    ports:
+      - "9160"
+      - "9042"
+      - "7199"
+      - "7001"
+      - "7000"
+    environment:
+      - CASSANDRA_START_RPC=true
+      - MAX_HEAP_SIZE=1G
+      - HEAP_NEWSIZE=256M
+    container_name: "cassandra_p2"
 
   cassandra_r1:
     image: cassandra:3.11
