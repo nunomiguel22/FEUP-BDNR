@@ -30,6 +30,9 @@ def init_g():
 KBID = 0
 g = init_g()
 
+if not g:
+    exit(-1)
+
 years = g.V().hasLabel('movies').values("year").dedup().to_list()
 genres = g.V().hasLabel("movies").outE(
     'of_genre').inV().dedup().valueMap('name').toList()

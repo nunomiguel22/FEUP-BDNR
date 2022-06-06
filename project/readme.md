@@ -34,5 +34,8 @@ Use ```janusgraph``` as the host. Test with query:
 g.V().limit(5)
 ```
 
+# Persistent data on cassandra containers
+Uncomment the volumes in the cassandra containers in docker-compose.yml to have data persist a container restart.
+
 # Flask Container
 On first setup Flask could fail if JanusGraph and the backends take too much time to start or even the database is empty and needs to be populated first. If so just restart the flask container when JanusGraph is ready and the DB populated.

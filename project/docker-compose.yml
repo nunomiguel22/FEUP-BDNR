@@ -37,6 +37,8 @@ services:
       - "7199"
       - "7001"
       - "7000"
+    #volumes:
+    #  - ./volumes/p1:/var/lib/cassandra
     container_name: "cassandra_p1"
 
   cassandra_p2:
@@ -51,6 +53,8 @@ services:
       - CASSANDRA_START_RPC=true
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=256M
+    #volumes:
+    #  - ./volumes/p2:/var/lib/cassandra
     container_name: "cassandra_p2"
 
   cassandra_r1:
@@ -59,6 +63,8 @@ services:
       - CASSANDRA_SEEDS=cassandra_p1
       - MAX_HEAP_SIZE=1G
       - HEAP_NEWSIZE=256M
+    #volumes:
+    #  - ./volumes/r1:/var/lib/cassandra
     container_name: "cassandra_r1"
 
 
