@@ -54,7 +54,14 @@
             <button type="button" onclick="location.href='/{{ movie[0] }}/edit'" class="btn btn-default btn-sm"
                 style="float: right;margin-right: 4px;"> Edit </button>
         <td>{{ movie[1].release_date[0] }}</td>
+
+        {% if movie[1].vote_average %}
         <td>{{ movie[1].vote_average[0] }}</td>
+        {% else %}
+        <td>0.0</td>
+        {% endif %}
+
+
         <td>{{ movie[1].original_language[0] }}</td>
     </tr>
     {% endfor %}
