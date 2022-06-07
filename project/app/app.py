@@ -134,6 +134,9 @@ def index():
 
     query = g.V()
 
+    if search is not None:
+        query = query.hasLabel('movies').has('original_title', search)
+
     if filter_by is not None:
         query = query.hasLabel('genres').has('name', filter_by).outE(
             'of_genre').limit(20).inV()
